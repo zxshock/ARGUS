@@ -1,0 +1,25 @@
+Installation notes:
+The card will work with the original GUS PnP DOS/Windows 3.11 drivers (PNPV22B.ZIP)
+After assembling the card, it's required to initially program the PNPROM so the card reserves its' resources when called by IWINIT.
+Failing to do so will cause the IWINIT program to hang. After using the PNPMAP program the card can be configured with the usual tools
+(i.e. setup.exe from the GUS PnP drivers).
+In case you're using a copy of the IW78C21M1 ROM contents or an original chip it's also a good idea to do a checksum test of them.
+
+PNPROM (programming PnP ROM):
+-----------------------
+1) boot system without IWINIT, if already installed
+2) pnpmap /f gravnocd.rom (included in the PNPMAP directory)
+3) Cold(!) reboot with GUS PnP drivers
+4) Card should be detected and operational
+5) IWINIT -v9 to check resources, total RAM found, name of Wavetable ROM (if present)
+
+IW78C21M1 (checksuming Wavetable ROM):
+-----------------------
+1) IWDUMP ROM FILE=IWROM.BIN START=0 SIZE=1M
+2) md5sum.exe IWROM.BIN
+3) Output checksum should be the same as checksum.jpg when using an 'original' IW78C21M1 ROM
+
+RAM:
+-----------------------
+You can check the Bank configuration either using the Windows 3.11 driver or the GUS/InterWave Info screen in XTC-Play (F3)
+RAM can be checked using setup.exe from the GUS PnP drivers 2.23

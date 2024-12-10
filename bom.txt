@@ -1,0 +1,85 @@
+ARGUS Final Bill of Materials (refer to partlist for details)
+
+Ceramic Capacitors (ratings should be 35V or higher):
+------------------------------
+Quantity     	Value            	Package
+6	 	22pF           		C0805
+4	 	470pF          		C0805
+33       	100nF          		C0805
+2	 	1nF            		C0805
+8	 	6.8nF          		C0805
+10	 	2.2uF          		C0805
+
+
+Electrolytic Capacitors:
+------------------------------
+Quantity     	Value            	Package 		Note
+
+9	 	10uF, 16V      		Through Hole		2.5mm Pin distance, 6mm diameter**
+3	 	10uF, 35V      		Through Hole		2.5mm Pin distance, 6mm diameter**
+
+
+Resistors (1/8W):
+------------------------------
+Quantity     	Value            	Package
+5/6     	nc             		R0805
+6/7		0              		R0805
+2        	75             		R0805
+3	 	200            		R0805
+2        	390            		R0805
+4        	2.2K           		R0805
+14       	5.1K           		R0805
+20       	10K            		R0805
+4        	20K            		R0805
+2	 	22K            		R0805
+1	 	61.9K          		R0805
+
+
+Integrated circuits:
+------------------------------
+Quantity	Value           	Package 		Note
+2       	DRAM 256K/1M * 16	SO40 / SO42		i.e. HY514260BJC-60 or HY5118160JC-70
+1	      	AM78C201AKC    		QFP160
+1		7805           		78XXL			1A or 3A Type
+1		7905           		79XXL			1A Type
+1		AT93C66SC      		SO8
+1		IW78C21M1     		SO44           		Alternatively: 29F800 (70ns or less)
+2		74F373DW       		SO20
+1		74F32D         		SO14
+1		TL082C         		SO8
+1		MS6308         		SO8			Alternatively: TDA1308
+
+
+Connectors:
+------------------------------
+Quantity	Value            	Package 		Note
+2		2.54mm Pinhead  	1X04/90
+1		SIMM Slot       	72 Pin			i.e. AMP 73824862 (90°, tested) or AMP 73826962 (0°, tested), but virtually any type should fit
+1		D-SUB           	F15HP
+3		3.5mm Audio Jack				Raised type i.e. CUI SJ1-3543N
+
+
+Jumpers:
+------------------------------
+Quantity	Value
+6		0402 SMD 0R Resistor or solderbridge
+
+
+Crystals:
+------------------------------
+Quantity	Value           	Package
+1	      	24.576MHz      		HC49/S
+1	      	16.9344MHz     		HC49/S
+
+
+Optional:
+------------------------------
+Quantity	Value            		Package 	Note
+3		2.54mm Pinhead  		1X02
+1		2.54mm Pinhead  		2X04            	
+1		2.54mm Pinhead  		2X31            	
+1		2.54mm Pinhead  		2X18       
+1		2.54mm Jumper bridge    
+2		1.27mm SMD female headers	2x25		Headers for ROM DB (i.e 20021321-00050T4LF)
+2		SOJ 40 Socket					i.e. AMP 3-822265-2
+1 		Yamaichi IC179Z-44				Socket for U31

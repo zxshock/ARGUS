@@ -1,0 +1,205 @@
+ARGUS Final Partlist
+
+Ceramic Capacitors (ratings should be 35V or higher):
+------------------------------
+Part     Value            	Package 		Note
+C0       100nF          	C0805
+C1       100nF          	C0805
+C2       100nF          	C0805
+C3       100nF          	C0805
+C4       100nF          	C0805
+C5       100nF          	C0805
+C6       100nF          	C0805
+C7       100nF          	C0805
+C8       100nF          	C0805
+C9       100nF          	C0805
+C10      100nF          	C0805
+C11      100nF          	C0805
+C12      100nF          	C0805
+C13      100nF          	C0805
+C14      100nF          	C0805
+C15A     22pF           	C0805
+C15B     22pF           	C0805
+C16      100nF          	C0805
+C16A     22pF           	C0805
+C16B     22pF           	C0805
+C17      100nF          	C0805
+C18      100nF          	C0805
+C20      100nF          	C0805
+C22      100nF          	C0805
+C30      100nF          	C0805
+C31      100nF          	C0805
+C32      100nF          	C0805
+C33      100nF          	C0805
+C40      100nF          	C0805
+C41      100nF          	C0805
+C42      100nF          	C0805
+C60      100nF          	C0805
+C61      22pF           	C0805
+C62      22pF           	C0805
+C63      470pF          	C0805
+C64      470pF          	C0805
+C71      470pF          	C0805
+C73      470pF          	C0805
+C80A     6.8nF          	C0805
+C80B     6.8nF          	C0805
+C81A     6.8nF          	C0805
+C81B     6.8nF          	C0805
+C82A     6.8nF          	C0805
+C82B     6.8nF          	C0805
+C83A     6.8nF          	C0805
+C83B     6.8nF          	C0805
+C84      1nF            	C0805
+C85      1nF            	C0805
+C86      100nF          	C0805
+C93      100nF          	C0805
+CA1      100nF          	C0805
+CA2      100nF          	C0805
+C706     2.2uF          	C0805
+C707     2.2uF          	C0805
+C708     2.2uF          	C0805
+C709     2.2uF          	C0805
+C710     2.2uF          	C0805
+C711     2.2uF          	C0805
+C712     2.2uF          	C0805
+C713     2.2uF          	C0805
+C714     2.2uF          	C0805
+C715     2.2uF          	C0805
+C716     100nF          	C0805
+
+Electrolytic Capacitors:
+------------------------------
+Part     Value            	Package 		Note
+C200     10uF, 35V*      	Through Hole		2.5mm Pin distance, 6mm diameter**
+C703     10uF, 16V*      	Through Hole		2.5mm Pin distance, 6mm diameter**
+C704     10uF, 16V*      	Through Hole		2.5mm Pin distance, 6mm diameter**
+C717     10uF, 16V*      	Through Hole		2.5mm Pin distance, 6mm diameter**
+C718     10uF, 16V*      	Through Hole		2.5mm Pin distance, 6mm diameter**
+C719     10uF, 16V*      	Through Hole		2.5mm Pin distance, 6mm diameter**
+C720     10uF, 35V*      	Through Hole		2.5mm Pin distance, 6mm diameter**
+C721     10uF, 16V*      	Through Hole		2.5mm Pin distance, 6mm diameter**
+C722     10uF, 16V*      	Through Hole		2.5mm Pin distance, 6mm diameter**
+C723     10uF, 16V*      	Through Hole		2.5mm Pin distance, 6mm diameter**
+C724     10uF, 16V*      	Through Hole		2.5mm Pin distance, 6mm diameter**
+C725     10uF, 35V*      	Through Hole		2.5mm Pin distance, 6mm diameter**
+* Voltage ratings are minimums, personally I used 50V capacitors for all.
+** A reasonable maximum height is 8mm when intending to use a daughterboard, otherwise virtually any height goes
+
+Resistors (1/8W [except R620]):
+------------------------------
+Part     Value            	Package 		Note
+R1       10K            	R0805
+R2       10K            	R0805
+R3       10K            	R0805
+R4       10K            	R0805
+R6       10K           		R0805
+R7       10K           		R0805
+R8       10K            	R0805
+R9       10K            	R0805
+R10      61.9K          	R0805
+R11      10K            	R0805			Place within Silkscreen (alternative placement for PnP debugging)
+R12      10K            	R0805
+R13A     10K            	R0805			Depends on U31, refer to silkscreen
+R13B     10K            	R0805			Depends on U31, refer to silkscreen
+R13C     0              	R0805			Depends on U31, refer to silkscreen
+R14      10K            	R0805
+R15      10K            	R0805
+R16      10K           		R0805
+R17      0              	R0805
+R18      0              	R0805
+R40      200            	R0805
+R41      nc             	R0805
+R52      5.1K           	R0805
+R53      5.1K           	R0805
+R54      5.1K           	R0805
+R55      5.1K           	R0805
+R60      5.1K           	R0805
+R61      22K            	R0805
+R62      390            	R0805
+R63      10K            	R0805
+R64      5.1K           	R0805
+R65      22K            	R0805
+R66      390            	R0805
+R67      10K            	R0805
+R70      10K            	R0805
+R71      20K            	R0805
+R72      10K            	R0805
+R73      20K            	R0805
+R74      75             	R0805
+R75      20K            	R0805
+R76      75             	R0805
+R77      20K            	R0805
+R80      2.2K           	R0805
+R81      2.2K           	R0805
+R82      2.2K           	R0805
+R83      2.2K           	R0805
+R84      200            	R0805
+R85      200            	R0805
+R600     5.1K           	R0805
+R602     5.1K           	R0805
+R605     5.1K           	R0805
+R606     5.1K           	R0805
+R607     5.1K           	R0805
+R608     5.1K           	R0805
+R609     10K            	R0805
+R610     5.1K           	R0805
+R611     5.1K           	R0805
+R612     0              	R0805
+R614     0              	R0805
+R615     0              	R0805
+R616     nc             	R0805
+R617     nc             	R0805
+R618     nc             	R0805
+R619     nc             	R0805
+R620     nc / 0         	R0805			See comment J6
+
+Integrated circuits:
+------------------------------
+Part     Value            	Package 		Note
+U0       RAM_256K_1M    	SO40 / SO42		i.e. HY514260BJC-60 (optional Socket: i.e. AMP 3-822265-2) or HY5118160JC-70
+U1       RAM_256K_1M    	SO40 / SO42		i.e. HY514260BJC-60 (optional Socket: i.e. AMP 3-822265-2) or HY5118160JC-70
+U10      AM78C201AKC     	QFP160
+U20      7805           	78XXL			1A or 3A Type
+U22      7905           	79XXL			1A Type
+U30      AT93C66SC      	SO8
+U31      IW78C21M1*      	SO44           		Alternatively: 29F800 (70ns or less, adjust R13x accordingly), Socket optionally supported (i.e. Yamaichi IC179Z-44)
+U32      74F373DW       	SO20
+U33      74F373DW       	SO20
+U40      74F32D         	SO14
+U60      TL082C         	SO8
+U70      MS6308         	SO8			Alternatively: TDA1308
+* alternatively one can solder 2x 2x25 1.27mm SMD female headers (i.e. 20021321-00050T4LF) onto the elongated pads (spanning U31 and U31EX), for a future daughterboard
+
+Connectors:
+------------------------------
+Part    Value            	Package 		Note
+MPC     2.54mm Pinhead  	1X04/90
+P45     2.54mm Pinhead  	1X04/90
+SIMM    SIMM Slot       	72 Pin			i.e. AMP 73824862 (90°, tested) or AMP 73826962 (0°, tested), but virtually any type should fit
+X0      D-SUB           	F15HP
+X1      3.5mm Audio Jack				Raised type i.e. CUI SJ1-3543N
+X2      3.5mm Audio Jack				Raised type i.e. CUI SJ1-3543N
+X3      3.5mm Audio Jack				Raised type i.e. CUI SJ1-3543N
+CON     2.54mm Pinhead  	1X02			optional for intercepting MIDI (don't place R84 & R85 then)           
+IW      2.54mm Pinhead  	1X02			optional for intercepting MIDI (don't place R84 & R85 then) 
+ESP     2.54mm Pinhead  	2X04            	optional for future SPDIF daughterboard
+ISA8    2.54mm Pinhead  	2X31            	optional for future expansions
+ISA16   2.54mm Pinhead  	2X18            	optional for future expansions
+U31EX   1.27mm Pinhead SMD	2x3			optional for future ROM expansion (see comment for U31) 
+
+Jumpers:
+------------------------------
+Part    Value            	Package 		Note
+J0      SMD Jumper      				0R Resistor or solderbridge - sets SOJ DRAM or SIMM active, refer to silkscreen
+J1      SMD Jumper      				0R Resistor or solderbridge - sets SOJ DRAM or SIMM active, refer to silkscreen
+J2      SMD Jumper      				0R Resistor or solderbridge - sets SOJ DRAM or SIMM active, refer to silkscreen
+J3      SMD Jumper      				0R Resistor or solderbridge - sets SOJ DRAM or SIMM active, refer to silkscreen
+J4      SMD Jumper      				0R Resistor or solderbridge - depends on U0/U1, refer to silkscreen
+J5      SMD Jumper      				0R Resistor or solderbridge - depends on U0/U1, refer to silkscreen
+J6      2.54mm Pinhead  	1X02	        	optional for -5V Supply to ISA (also place R620, refer to silkscreen)
+
+Crystals:
+------------------------------
+Part     Value            	Package 		Note
+X17      24.576MHz      	HC49/S
+X18      16.9344MHz     	HC49/S

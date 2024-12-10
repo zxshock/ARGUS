@@ -1,0 +1,28 @@
+This is additional info for some headers left on the board for future extensions, keep in mind nothing has been tested (as those features were requested but went outside of the projects intentions) and some signals might be missing. USE AT YOUR OWN RISK
+Signals are named the same as in the datasheet for the AM78C201AKC
+
+
+Pinouts (orientations as on PCB):
+U31EX (ROM expansion):
+
+		1		2		3
+		!BKSEL0		!BKSEL1		!BKSEL2
+
+		4		5		6
+		!RAS     	!MWE		!BKSEL3
+
+ESP (SPDIF expansion):
+
+		EX_DRQ	1	2  VCC
+		!EX_CS	3	4  nc
+	       !EX_IRQ	5	6  nc
+	       !EX_DAK	7	8  VCC
+
+
+Notes:
+-5V feedback to ISA J6/R620 hasn't been extensively tested, refer to silkscreen on your own risk
+IW/CON have their pinouts on the silkscreen, left pins connect to the InterWave, right pins to the DSUB connector - don't place R84, R85 when using a DB
+ISA8/ISA16 1:1 ISA bus passthrough
+
+Everything else:
+Post in the thread @ https://www.vogons.org/viewtopic.php?f=62&t=42431 or contact me directly on VOGONS
