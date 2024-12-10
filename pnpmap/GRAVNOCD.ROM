@@ -1,0 +1,742 @@
+;===========================================================================
+;
+; Advanced Gravis InterWave Board Plug And Play Serial EEPROM Map
+; Copyright 1995 Advanced Micro Devices.  All Rights Reserved.
+;
+; For the Advanced Gravis InterWave Board With B Step Silicon
+;
+; Tim Otholt, 09/11/95 - Initial version
+; Tim Otholt, 09/29/95 - Removed Synth IRQ2
+;                        Removed channel 0 for Synth DMA1 and DMA2
+;                        Changed MPU I/O decode type from 10-bits to 16-bits
+; Tim Otholt, 10/06/95 - Changed DMA type from 0x01 to 0x19
+;                        Changed CD-ROM dependent function type from
+;                        0x30 to 0x31.
+;                        Removed DMA channel for CD-ROM.
+; Predrag Kostic 10/24/95 - add Win95 logo support
+; Predrag Kostic 11/16/95 - IRQ 10 removed for default config.
+; Jayeson Lee-Steere 10/17/96 - Added IRQ 5 & 7 to Synth Device
+;                             - Remove IRQ requirement for MPU device
+;                             - IDE & Game Port always use the default
+;                               Windows drivers.
+; Jayeson Lee-Steere 10/31/96 - Changed a bunch of names and dependent
+;                               functions for the resource allocation
+;                               Since the CD-ROM is removed in this one,
+;                               we have more space for the other devices
+;
+; To write this EEPROM map to an EEPROM, use PNPMAP.EXE, provided by CSE.
+; Do not use any version of EEWRITE; the various versions of EEWRITE
+; floating around come in various flavors; some do not support comments,
+; others do not support quoted strings.  Others support comments only at
+; the beginning of a line, not at the end.  Just use PNPMAP.EXE, the
+; officially supported version from Advanced Micro Devices.
+;
+;===========================================================================
+
+;---------------------------------------------------------------------------
+; PnP Header
+;
+; The PnP header contains the 72-bit "serial identifier", used by PnP
+; initialization software to isolate the PnP device.
+;---------------------------------------------------------------------------
+
+0x1E            ; Advanced Gravis 'GRV' Vendor ID Byte 0
+0x56            ; Advanced Gravis 'GRV' Vendor ID Byte 1
+0x00            ; Advanced Gravis 'GRV0001' Vendor assigned product number (byte 0)
+0x01            ; Advanced Gravis 'GRV0001' Vendor assigned product number (byte 1)
+0xFF            ; Serial Number Byte 0
+0xFF            ; Serial Number Byte 1
+0xFF            ; Serial Number Byte 2
+0xFF            ; Serial Number Byte 3
+0x00            ; Special LFSR checksum (PnP specification appendix B)
+                ; PNPMAP will calculate this for us
+;---------------------------------------------------------------------------
+; PnP Version
+;
+; The PnP version entry tells the PnP initialization software which
+; version of the PnP specification the hardware is compatible with.
+;---------------------------------------------------------------------------
+
+0x0A            ; PnP Version - Small item, PnP version tag, 2 bytes
+0x10            ; InterWave is compatible with PnP spec 1.0
+0x12            ; InterWave EEPROM version 1.0
+
+;---------------------------------------------------------------------------
+; ANSI Identifier string
+;
+; The Ansi Identifier string is an ASCII text string to display to the
+; user for prompts and messages about the InterWave board.
+;---------------------------------------------------------------------------
+
+0x82            ; ANSI identifier string - Large item, ID string tag
+0x16            ; Length byte 0 (low byte)  - In total, 22 bytes long
+0x00            ; Length byte 1 (high byte)
+'UltraSound Plug & Play' ; Actual ANSI identifier
+
+;===========================================================================
+; Logical Device Block (0)
+;
+; The logical device defines the resources used by a specific function of
+; the PnP device.  The first logical device defined for InterWave is the
+; InterWave synthesizer.  Note that all resource information following
+; the Logical Device Block applies to the previous Logical Device, until
+; a new Logical Device Block is declared.
+;===========================================================================
+
+0x15            ; Small item, logical device ID, 5 bytes long
+0x1E            ; Vendor ID byte 0
+0x56            ; Vendor ID byte 1
+0x00            ; Vendor assigned function ID (byte 0)
+0x00            ; Vendor assigned function ID (byte 1)
+0x02            ; flags[1] = supports commands at index 0x31
+
+;---------------------------------------------------------------------------
+; Vendor defined info list which devices are enabled and which aren't
+;---------------------------------------------------------------------------
+0x72            ; Small item, Vendor Defined, 2 bytes long
+0xFD            ; All enabled except CD
+0xFF            ; None using manual settings
+
+;---------------------------------------------------------------------------
+; ANSI Identifier string
+;
+; The Ansi Identifier string is an ASCII text string to display to the user
+; for prompts and messages about the InterWave board.
+;
+; Note - It turns out that the first release of Windows 95 does not use
+; the information stored in this field; instead, it uses the .INF file to
+; determine the ASCII string for this logical device.  However, it does
+; show up in the registry.
+;---------------------------------------------------------------------------
+
+0x82            ; ANSI identifier string - Large item, ID string tag
+0x0D            ; Length byte 0 (low byte)  - In total, 13 bytes long
+0x00            ; Length byte 1 (high byte)
+'Synth & Codec' ; Actual ANSI identifier
+
+;---------------------------------------------------------------------------
+; InterWave Synthesizer I/O port , DMA and IRQ descriptor
+;
+; The I/O port descriptor defines which I/O ports are supported
+; for the specified logical device.
+;
+; Note that the "start dependent function", and "end dependent
+; function", is not part of the I/O port descriptor.  It is used
+; to tell the PnP configuration software that this logical device
+; has a preferred configuration for this resource (in our case,
+; the synthesizer's preferred I/O resource is 220h/320h/32Ch),
+; and what that preferred configuration is.
+;
+; Although the InterWave can support a large number of possible
+; I/O port configurations, for backwards compatibility with
+; Gravis software (and to make Sound Blaster emulation work),
+; the only addresses allowed are 220h/320h/32Ch, 240h/340h/34Ch
+; 230h/330h/33Ch, 250h/350h/35Ch, 260h/360h/36Ch, 
+; We need two DMA channels and one IRQ channel
+;---------------------------------------------------------------------------
+
+;-----------------------------;
+; Configuration 0 (preferred) ;
+;-----------------------------;
+
+0x31            ; Small item, start dependent function, 1 byte long
+0x00            ; 00 = Preferred resource configuration
+
+0x22            ; Small item, IRQ tag, 2 bytes long (Synth IRQ 1)
+0x00            ; Pic 0: 00 = 00000000 (No IRQs on lower PIC)
+0x98            ; Pic 1: 98 = 10011000 (IRQ 15, 12, 11)
+
+0x2A            ; Small item, DMA descriptor, 2 bytes long (Synth DMA 1)
+0x20            ; 20 = 00100000 (DMA 5)
+0x12            ; DMA transfer types: 16-bit transfers supported
+
+0x2A            ; Small item, DMA descriptor, 2 bytes long (Synth DMA 2)
+0x80            ; 80 = 10000000 (DMA 7)
+0x12            ; DMA transfer types: 16-bit transfers supported
+
+0x47            ; Small item, I/O port descriptor
+0x01            ; 16 bit address decode supported
+0x20            ; Minimum base P2xR I/O address low 220h
+0x02            ; Minimum base P2xR I/O address high 220h
+0x20            ; Maximum base P2xR I/O address low 220h
+0x02            ; Maximum base P2xR I/O address high 220h
+0x01            ; Alignment 1 byte
+0x10            ; P2xR I/O address width = 16 contiguous I/O ports
+
+0x47            ; Small item, I/O port descriptor
+0x01            ; 16 bit address decode
+0x20            ; Minimum base P3xR I/O address low   = 320h
+0x03            ; Minimum P3xR I/O address high  = 320h
+0x20            ; Maximum base P3xR I/O address low   = 320h
+0x03            ; Maximum P3xR I/O address high  = 320h
+0x01            ; Alignment 1 byte
+0x08            ; P3xR I/O address width = 8 contiguous I/O ports
+
+0x47            ; Small item, I/O port descriptor
+0x01            ; 16 bit address decode
+0x2C            ; Minimum PCODAR I/O address low   = 32Ch
+0x03            ; Minimum PCODAR I/O address high  = 32Ch
+0x2C            ; Maximum PCODAR I/O address low   = 32Ch
+0x03            ; Maximum PCODAR I/O address high  = 32Ch
+0x01            ; Alignment 1 byte
+0x04            ; PCODAR I/O address width = 4 contiguous I/O ports
+
+;------------------------------;
+; Configuration 1 (acceptable) ;
+;------------------------------;
+
+0x31            ; Small item, start dependent function, 1 byte long
+0x01            ; 01 = Acceptable resource configuration
+
+0x22            ; Small item, IRQ tag, 2 bytes long (Synth IRQ 1)
+0xA0            ; Pic 0: A0 = 10100000 (IRQ 5, 7)
+0x98            ; Pic 1: 98 = 10011000 (IRQ 15, 12, 11)
+
+0x2A            ; Small item, DMA descriptor, 2 bytes long (Synth DMA 1)
+0xEA            ; EA = 11101010 (DMA 7,6,5,3,1)
+0x19            ; DMA transfer types: 8-bit and 16-bit transfers supported
+
+0x2A            ; Small item, DMA descriptor, 2 bytes long (Synth DMA 2)
+0xEA            ; EA = 11101010 (DMA 7,6,5,3,1)
+0x19            ; DMA transfer types: 8-bit and 16-bit transfers supported
+
+0x47            ; Small item, I/O port descriptor
+0x01            ; 16 bit address decode supported
+0x20            ; Minimum base P2xR I/O address low 220h
+0x02            ; Minimum base P2xR I/O address high 220h
+0x20            ; Maximum base P2xR I/O address low 220h
+0x02            ; Maximum base P2xR I/O address high 220h
+0x01            ; Alignment 1 byte
+0x10            ; P2xR I/O address width = 16 contiguous I/O ports
+
+0x47            ; Small item, I/O port descriptor
+0x01            ; 16 bit address decode
+0x20            ; Minimum base P3xR I/O address low   = 320h
+0x03            ; Minimum P3xR I/O address high  = 320h
+0x20            ; Maximum base P3xR I/O address low   = 320h
+0x03            ; Maximum P3xR I/O address high  = 320h
+0x01            ; Alignment 1 byte
+0x08            ; P3xR I/O address width = 8 contiguous I/O ports
+
+0x47            ; Small item, I/O port descriptor
+0x01            ; 16 bit address decode
+0x2C            ; Minimum PCODAR I/O address low   = 32Ch
+0x03            ; Minimum PCODAR I/O address high  = 32Ch
+0x2C            ; Maximum PCODAR I/O address low   = 32Ch
+0x03            ; Maximum PCODAR I/O address high  = 32Ch
+0x01            ; Alignment 1 byte
+0x04            ; PCODAR I/O address width = 4 contiguous I/O ports
+
+;------------------------------;
+; Configuration 2 (acceptable) ;
+;------------------------------;
+
+0x31            ; Small item, start dependent function, 1 byte long
+0x01            ; 01 = Acceptable I/O resource configuration
+
+0x22            ; Small item, IRQ tag, 2 bytes long (Synth IRQ 1)
+0x00            ; Pic 0: 00 = 00000000 (No IRQs on lower PIC)
+0x98            ; Pic 1: 98 = 10011000 (IRQ 15, 12, 11)
+
+0x2A            ; Small item, DMA descriptor, 2 bytes long (Synth DMA 1)
+0x20            ; 20 = 00100000 (DMA 5)
+0x12            ; DMA transfer types: 16-bit transfers supported
+
+0x2A            ; Small item, DMA descriptor, 2 bytes long (Synth DMA 2)
+0x80            ; 80 = 10000000 (DMA 7)
+0x12            ; DMA transfer types: 16-bit transfers supported
+
+0x47            ; Small item, I/O port descriptor
+0x01            ; 16 bit address decode supported
+0x40            ; Minimum base P2xR I/O address low 240h
+0x02            ; Minimum base P2xR I/O address high 240h
+0x40            ; Maximum base P2xR I/O address low 240h
+0x02            ; Maximum base P2xR I/O address high 240h
+0x01            ; Alignment 1 byte
+0x10            ; P2xR I/O address width = 16 contiguous I/O ports
+
+0x47            ; Small item, I/O port descriptor
+0x01            ; 16 bit address decode
+0x40            ; Minimum base P3xR I/O address low   = 340h
+0x03            ; Minimum P3xR I/O address high  = 340h
+0x40            ; Maximum base P3xR I/O address low   = 340h
+0x03            ; Maximum P3xR I/O address high  = 340h
+0x01            ; Alignment 1 byte
+0x08            ; P3xR I/O address width = 8 contiguous I/O ports
+
+0x47            ; Small item, I/O port descriptor
+0x01            ; 16 bit address decode
+0x4C            ; Minimum PCODAR I/O address low   = 34Ch
+0x03            ; Minimum PCODAR I/O address high  = 34Ch
+0x4C            ; Maximum PCODAR I/O address low   = 34Ch
+0x03            ; Maximum PCODAR I/O address high  = 34Ch
+0x01            ; Alignment 1 bytes
+0x04            ; PCODAR I/O address width = 4 contiguous I/O ports
+
+;------------------------------;
+; Configuration 3 (acceptable) ;
+;------------------------------;
+
+0x31            ; Small item, start dependent function, 1 byte long
+0x01            ; 01 = Acceptable I/O resource configuration
+
+0x22            ; Small item, IRQ tag, 2 bytes long (Synth IRQ 1)
+0xA0            ; Pic 0: A0 = 10100000 (IRQ 5, 7)
+0x98            ; Pic 1: 98 = 10011000 (IRQ 15, 12, 11)
+
+0x2A            ; Small item, DMA descriptor, 2 bytes long (Synth DMA 1)
+0xEA            ; EA = 11101010 (DMA 7,6,5,3,1)
+0x19            ; DMA transfer types: 8-bit and 16-bit transfers supported
+
+0x2A            ; Small item, DMA descriptor, 2 bytes long (Synth DMA 2)
+0xEA            ; EA = 11101010 (DMA 7,6,5,3,1)
+0x19            ; DMA transfer types: 8-bit and 16-bit transfers supported
+
+0x47            ; Small item, I/O port descriptor
+0x01            ; 16 bit address decode supported
+0x40            ; Minimum base P2xR I/O address low 240h
+0x02            ; Minimum base P2xR I/O address high 240h
+0x40            ; Maximum base P2xR I/O address low 240h
+0x02            ; Maximum base P2xR I/O address high 240h
+0x01            ; Alignment 1 byte
+0x10            ; P2xR I/O address width = 16 contiguous I/O ports
+
+0x47            ; Small item, I/O port descriptor
+0x01            ; 16 bit address decode
+0x40            ; Minimum base P3xR I/O address low   = 340h
+0x03            ; Minimum P3xR I/O address high  = 340h
+0x40            ; Maximum base P3xR I/O address low   = 340h
+0x03            ; Maximum P3xR I/O address high  = 340h
+0x01            ; Alignment 1 byte
+0x08            ; P3xR I/O address width = 8 contiguous I/O ports
+
+0x47            ; Small item, I/O port descriptor
+0x01            ; 16 bit address decode
+0x4C            ; Minimum PCODAR I/O address low   = 34Ch
+0x03            ; Minimum PCODAR I/O address high  = 34Ch
+0x4C            ; Maximum PCODAR I/O address low   = 34Ch
+0x03            ; Maximum PCODAR I/O address high  = 34Ch
+0x01            ; Alignment 1 byte
+0x04            ; PCODAR I/O address width = 4 contiguous I/O ports
+
+;-------------------------------;
+; Configuration 4 (acceptable)  ;
+;-------------------------------;
+
+0x31            ; Small item, start dependent function, 1 byte long
+0x01            ; 01 = Acceptable I/O resource configuration
+
+0x22            ; Small item, IRQ tag, 2 bytes long (Synth IRQ 1)
+0xA0            ; Pic 0: A0 = 10100000 (IRQ 5, 7)
+0x98            ; Pic 1: 98 = 10011000 (IRQ 15, 12, 11)
+
+0x2A            ; Small item, DMA descriptor, 2 bytes long (Synth DMA 1)
+0xEA            ; EA = 11101010 (DMA 7,6,5,3,1)
+0x19            ; DMA transfer types: 8-bit and 16-bit transfers supported
+
+0x2A            ; Small item, DMA descriptor, 2 bytes long (Synth DMA 2)
+0xEA            ; EA = 11101010 (DMA 7,6,5,3,1)
+0x19            ; DMA transfer types: 8-bit and 16-bit transfers supported
+
+0x47            ; Small item, I/O port descriptor
+0x01            ; 16 bit address decode supported
+0x30            ; Minimum base P2xR I/O address low 230h
+0x02            ; Minimum base P2xR I/O address high 230h
+0x30            ; Maximum base P2xR I/O address low 230h
+0x02            ; Maximum base P2xR I/O address high 230h
+0x01            ; Alignment 1 byte
+0x10            ; P2xR I/O address width = 16 contiguous I/O ports
+
+0x47            ; Small item, I/O port descriptor
+0x01            ; 16 bit address decode
+0x30            ; Minimum base P3xR I/O address low   = 330h
+0x03            ; Minimum P3xR I/O address high  = 330h
+0x30            ; Maximum base P3xR I/O address low   = 330h
+0x03            ; Maximum P3xR I/O address high  = 330h
+0x01            ; Alignment 1 byte
+0x08            ; P3xR I/O address width = 8 contiguous I/O ports
+
+0x47            ; Small item, I/O port descriptor
+0x01            ; 16 bit address decode
+0x3C            ; Minimum PCODAR I/O address low   = 33Ch
+0x03            ; Minimum PCODAR I/O address high  = 33Ch
+0x3C            ; Maximum PCODAR I/O address low   = 33Ch
+0x03            ; Maximum PCODAR I/O address high  = 33Ch
+0x01            ; Alignment 1 byte
+0x04            ; PCODAR I/O address width = 4 contiguous I/O ports
+
+;-------------------------------;
+; Configuration 5 (acceptable)  ;
+;-------------------------------;
+
+0x31            ; Small item, start dependent function, 1 byte long
+0x01            ; 01 = Acceptable I/O resource configuration
+
+0x22            ; Small item, IRQ tag, 2 bytes long (Synth IRQ 1)
+0xA0            ; Pic 0: A0 = 10100000 (IRQ 5, 7)
+0x98            ; Pic 1: 98 = 10011000 (IRQ 15, 12, 11)
+
+0x2A            ; Small item, DMA descriptor, 2 bytes long (Synth DMA 1)
+0xEA            ; EA = 11101010 (DMA 7,6,5,3,1)
+0x19            ; DMA transfer types: 8-bit and 16-bit transfers supported
+
+0x2A            ; Small item, DMA descriptor, 2 bytes long (Synth DMA 2)
+0xEA            ; EA = 11101010 (DMA 7,6,5,3,1)
+0x19            ; DMA transfer types: 8-bit and 16-bit transfers supported
+
+0x47            ; Small item, I/O port descriptor
+0x01            ; 16 bit address decode supported
+0x50            ; Minimum base P2xR I/O address low 250h
+0x02            ; Minimum base P2xR I/O address high 250h
+0x50            ; Maximum base P2xR I/O address low 250h
+0x02            ; Maximum base P2xR I/O address high 250h
+0x01            ; Alignment 1 byte
+0x10            ; P2xR I/O address width = 16 contiguous I/O ports
+
+0x47            ; Small item, I/O port descriptor
+0x01            ; 16 bit address decode
+0x50            ; Minimum base P3xR I/O address low   = 350h
+0x03            ; Minimum P3xR I/O address high  = 350h
+0x50            ; Maximum base P3xR I/O address low   = 350h
+0x03            ; Maximum P3xR I/O address high  = 350h
+0x01            ; Alignment 1 byte
+0x08            ; P3xR I/O address width = 8 contiguous I/O ports
+
+0x47            ; Small item, I/O port descriptor
+0x01            ; 16 bit address decode
+0x5C            ; Minimum PCODAR I/O address low   = 35Ch
+0x03            ; Minimum PCODAR I/O address high  = 35Ch
+0x5C            ; Maximum PCODAR I/O address low   = 35Ch
+0x03            ; Maximum PCODAR I/O address high  = 35Ch
+0x01            ; Alignment 1 byte
+0x04            ; PCODAR I/O address width = 4 contiguous I/O ports
+
+;-------------------------------;
+; Configuration 6 (acceptable)  ;
+;-------------------------------;
+
+0x31            ; Small item, start dependent function, 1 byte long
+0x01            ; 01 = Acceptable I/O resource configuration
+
+0x22            ; Small item, IRQ tag, 2 bytes long (Synth IRQ 1)
+0xA0            ; Pic 0: A0 = 10100000 (IRQ 5, 7)
+0x98            ; Pic 1: 98 = 10011000 (IRQ 15, 12, 11)
+
+0x2A            ; Small item, DMA descriptor, 2 bytes long (Synth DMA 1)
+0xEA            ; EA = 11101010 (DMA 7,6,5,3,1)
+0x19            ; DMA transfer types: 8-bit and 16-bit transfers supported
+
+0x2A            ; Small item, DMA descriptor, 2 bytes long (Synth DMA 2)
+0xEA            ; EA = 11101010 (DMA 7,6,5,3,1)
+0x19            ; DMA transfer types: 8-bit and 16-bit transfers supported
+
+0x47            ; Small item, I/O port descriptor
+0x01            ; 16 bit address decode supported
+0x60            ; Minimum base P2xR I/O address low 260h
+0x02            ; Minimum base P2xR I/O address high 260h
+0x60            ; Maximum base P2xR I/O address low 260h
+0x02            ; Maximum base P2xR I/O address high 260h
+0x01            ; Alignment 1 byte
+0x10            ; P2xR I/O address width = 16 contiguous I/O ports
+
+0x47            ; Small item, I/O port descriptor
+0x01            ; 16 bit address decode
+0x60            ; Minimum base P3xR I/O address low   = 360h
+0x03            ; Minimum P3xR I/O address high  = 360h
+0x60            ; Maximum base P3xR I/O address low   = 360h
+0x03            ; Maximum P3xR I/O address high  = 360h
+0x01            ; Alignment 1 byte
+0x08            ; P3xR I/O address width = 8 contiguous I/O ports
+
+0x47            ; Small item, I/O port descriptor
+0x01            ; 16 bit address decode
+0x6C            ; Minimum PCODAR I/O address low   = 36Ch
+0x03            ; Minimum PCODAR I/O address high  = 36Ch
+0x6C            ; Maximum PCODAR I/O address low   = 36Ch
+0x03            ; Maximum PCODAR I/O address high  = 36Ch
+0x01            ; Alignment 1 byte
+0x04            ; PCODAR I/O address width = 4 contiguous I/O ports
+
+0x38            ; Small item, end dependent function, 0 bytes long
+
+;===========================================================================
+; Logical Device Block (1)
+;
+; The next logical device on the InterWave part is the external
+; device decoder (CD-ROM interface).  Note that all the resource
+; information following this block are setup for a board with an
+; ATAPI compatible interface.
+;===========================================================================
+
+0x15            ; Small item, logical device ID, 5 bytes long
+0x1E            ; Vendor ID byte 0
+0x56            ; Vendor ID byte 1
+0x00            ; Vendor assigned function ID (byte 0)
+0x11            ; Vendor assigned function ID (byte 1)
+0x02            ; flags[1] = supports commands at index 0x31
+
+;---------------------------------------------------------------------------
+; ANSI Identifier string
+;
+; The Ansi Identifier string is an ASCII text string to display
+; to the user for prompts and messages about the InterWave board.
+;---------------------------------------------------------------------------
+
+0x82            ; ANSI identifier string - Large item, ID string tag
+0x0F            ; Length byte 0 (low byte)  - In total, 15 bytes long
+0x00            ; Length byte 1 (high byte)
+'Disabled Device' ; Actual ASCII identifier
+
+;===========================================================================
+; Logical Device Block (2)
+;
+; The third logical device on the InterWave part is the joystick
+; (game port) interface.  The joystick only uses a single
+; I/O port.
+;===========================================================================
+
+0x15            ; Small item, logical device ID, 5 bytes long
+0x41            ; Device ID "PNPB02F" in standard PnP vendor ID notation
+0xD0
+0xB0
+0x2F
+0x02            ; flags[1] = supports commands at index 0x31
+
+;---------------------------------------------------------------------------
+; ANSI Identifier string
+;
+; The Ansi Identifier string is an ASCII text string to display
+; to the user for prompts and messages about the InterWave board.
+;---------------------------------------------------------------------------
+
+
+0x82            ; ANSI identifier string - Large item, ID string tag
+0x09            ; Length byte 0 (low byte)  - In total, 9 bytes long
+0x00            ; Length byte 1 (high byte)
+'Game Port'     ; Actual ANSI identifier
+
+;---------------------------------------------------------------------------
+; InterWave Joystick I/O descriptor block
+;---------------------------------------------------------------------------
+;---------------------------------------------------------------------------
+; Best configuration - uses standard port of 201
+;---------------------------------------------------------------------------
+0x31            ; Small item, start dependent function, 1 byte long
+0x00            ; 00 = Preferred I/O resource configuration
+
+0x47            ; Small item, I/O port descriptor, 7 bytes long
+0x01            ; 16 bit decoding
+0x01            ; P2xR Min. I/O address low   = 201h
+0x02            ; P2xR Min. I/O address high  = 201h
+0x01            ; P2xR Max. I/O address low   = 201h
+0x02            ; P2xR Max. I/O address high  = 201h
+0x01            ; alignment 1
+0x01            ; P2xR I/O address width = 1 contiguous I/O ports
+
+;---------------------------------------------------------------------------
+; Can't get 201, well take anything then
+;---------------------------------------------------------------------------
+0x31            ; Small item, start dependent function, 1 byte long
+0x02            ; 02 = Sub-optimal I/O resource configuration
+
+0x47            ; Small item, I/O port descriptor, 7 bytes long
+0x01            ; 16 bit decoding
+0x00            ; P2xR Min. I/O address low   = 200h
+0x02            ; P2xR Min. I/O address high  = 200h
+0xFF            ; P2xR Max. I/O address low   = 2ffh
+0x02            ; P2xR Max. I/O address high  = 2ffh
+0x01            ; alignment 1
+0x01            ; P2xR I/O address width = 1 contiguous I/O ports
+
+0x38            ;Small item, end of dependent function
+
+;===========================================================================
+; Logical Device Block (3)
+;
+; The fourth logical device on the InterWave part is the Adlib
+; FM register set and Sound Blaster interrupt line.
+;===========================================================================
+
+0x15            ; Small item, logical device ID, 5 bytes long
+0x1E            ; Vendor ID byte 0
+0x56            ; Vendor ID byte 1
+0x00            ; Vendor assigned function ID (byte 0)
+0x03            ; Vendor assigned function ID (byte 1)
+0x02            ; flags[1] = supports commands at index 0x31
+
+;---------------------------------------------------------------------------
+; ANSI Identifier string
+;
+; The Ansi Identifier string is an ASCII text string to display
+; to the user for prompts and messages about the InterWave board.
+;---------------------------------------------------------------------------
+
+0x82            ; ANSI identifier string - Large item, ID string tag
+0x13            ; Length byte 0 (low byte)  - In total, 19 bytes long
+0x00            ; Length byte 1 (high byte)
+'SB Compatible Audio' ; Actual ANSI identifier
+
+;---------------------------------------------------------------------------
+; InterWave SB DMA structure
+;
+; The DMA structure defines which DMA channels are supported for
+; the specified logical device.  In our case, we require one DMA
+; channel (1) for Sound Blaster DMA.
+;---------------------------------------------------------------------------
+
+0x2A            ; Small item, DMA descriptor, 2 bytes long (SB DMA)
+0x02            ; 02 = 00000010 (DMA 1 only)
+0x08            ; DMA transfer types: 8-bit supported, compatibility mode
+
+;---------------------------------------------------------------------------
+; Config 0 - Preferred
+;---------------------------------------------------------------------------
+0x31            ; Small item, start dependent function, 1 byte long
+0x00            ; 00 = Preferred resource configuration
+
+0x22            ; Small item, IRQ tag, 2 bytes long (SB IRQ)
+0x20            ; Pic 0: 20 = 00100000 (IRQ 5)
+0x00            ; Pic 1: 00 = 00000000 (no upper IRQs allowed for SB)
+
+0x47            ; Small item, I/O port descriptor
+0x01            ; 16 bit address decode
+0x88            ; Minimum FM I/O address low   = 388h
+0x03            ; Minimum FM I/O address high  = 388h
+0x88            ; Maximum FM I/O address low   = 388h
+0x03            ; Maximum FM I/O address high  = 388h
+0x01            ; Alignment 1 byte
+0x02            ; FM I/O address width = 2 consecutive I/O ports
+
+;---------------------------------------------------------------------------
+; Config 1 - Acceptable
+;---------------------------------------------------------------------------
+0x31            ; Small item, start dependent function, 1 byte long
+0x01            ; 01 = Acceptable resource configuration
+
+0x22            ; Small item, IRQ tag, 2 bytes long (SB IRQ)
+0xA0            ; Pic 0: A0 = 10100000 (IRQ 7, 5)
+0x00            ; Pic 1: 00 = 00000000 (no upper IRQs allowed for SB)
+
+0x47            ; Small item, I/O port descriptor
+0x01            ; 16 bit address decode
+0x88            ; Minimum FM I/O address low   = 388h
+0x03            ; Minimum FM I/O address high  = 388h
+0x88            ; Maximum FM I/O address low   = 388h
+0x03            ; Maximum FM I/O address high  = 388h
+0x01            ; Alignment 1 byte
+0x02            ; FM I/O address width = 2 consecutive I/O ports
+
+;---------------------------------------------------------------------------
+; Config 2 - Sub-Optimal
+;---------------------------------------------------------------------------
+0x31            ; Small item, start dependent function, 1 byte long
+0x02            ; 02 = Sub-Optimal resource configuration
+
+0x22            ; Small item, IRQ tag, 2 bytes long (SB IRQ)
+0xA8            ; Pic 0: A8 = 10101000 (IRQ 7, 5, 3)
+0x02            ; Pic 1: 02 = 00000010 (IRQ 9)
+
+0x47            ; Small item, I/O port descriptor
+0x01            ; 16 bit address decode
+0x8A            ; Minimum FM I/O address low   = 38Ah
+0x03            ; Minimum FM I/O address high  = 38Ah
+0xF0            ; Maximum FM I/O address low   = 3F0h
+0x03            ; Maximum FM I/O address high  = 3F0h
+0x02            ; Alignment 1 byte
+0x02            ; FM I/O address width = 2 consecutive I/O ports
+
+0x38            ; End dependent function
+
+;===========================================================================
+; Logical Device Block (4)
+;
+; The last logical device on the InterWave part is the MPU-401
+; device.
+;===========================================================================
+
+0x15            ; Small item, logical device ID, 5 bytes long
+0x1E            ; Vendor ID byte 0
+0x56            ; Vendor ID byte 1
+0x00            ; Vendor assigned function ID (byte 0)
+0x04            ; Vendor assigned function ID (byte 1)
+0x02            ; flags[1] = supports commands at index 0x31
+
+;---------------------------------------------------------------------------
+; ANSI Identifier string
+;
+; The Ansi Identifier string is an ASCII text string to display
+; to the user for prompts and messages about the InterWave board.
+;---------------------------------------------------------------------------
+
+0x82            ; ANSI identifier string - Large item, ID string tag
+0x10            ; Length byte 0 (low byte)  - In total, 16 bytes long
+0x00            ; Length byte 1 (high byte)
+'MPU-401 GM Music'; Actual ANSI identifier
+
+;---------------------------------------------------------------------------
+; InterWave MPU-401 (General MIDI) I/O descriptor block
+;
+; Many games support a variety of addresses for the MPU-401 I/O
+; base address.  For PnP, we are telling the PnP manager that
+; we support: 330h, 300h, 310h, 320h, 340h.
+;---------------------------------------------------------------------------
+;-----------------------------;
+; Configuration 0 (preferred) ;
+;-----------------------------;
+
+0x31            ; Small item, start dependent function, 1 byte long
+0x00            ; 00 = Preferred I/O resource configuration
+
+0x47            ; Small item, I/O port descriptor, 7 bytes long
+0x01            ; 16 bit decoding
+0x30            ; Min. I/O address low   = 330h
+0x03            ; Min. I/O address high  = 330h
+0x30            ; Max. I/O address low   = 330h
+0x03            ; Max. I/O address high  = 330h
+0x02            ; alignment 2
+0x02            ; I/O address width = 2 contiguous I/O ports
+
+;-----------------------------;
+; Configuration 1 (alternate) ;
+;-----------------------------;
+
+0x31            ; Small item, start dependent function, 1 byte long
+0x02            ; 02 = Sub-optimal I/O resource configuration
+0x47            ; Small item, I/O port descriptor, 7 bytes long
+0x01            ; 16-bit I/O decode
+0x00            ; Lowest I/O base address (low byte)  = 300h
+0x03            ; Lowest I/O base address (high byte)  = 300h
+0x40            ; Highest I/O base address (low byte)  = 340h
+0x03            ; Highest I/O base address (high byte) = 340h
+0x10            ; I/O port must be aligned on a 0x10 byte boundary
+0x02            ; Cox-Missing 2 byte consecutive 
+
+;-----------------------------;
+; Configuration 2 (alternate) ;
+;-----------------------------;
+
+0x31            ; Small item, start dependent function, 1 byte long
+0x02            ; 02 = Sub-optimal I/O resource configuration
+0x47            ; Small item, I/O port descriptor, 7 bytes long
+0x01            ; 16-bit I/O decode
+0x32            ; Lowest I/O base address (low byte)  = 332h
+0x03            ; Lowest I/O base address (high byte)  = 332h
+0x26            ; Highest I/O base address (low byte)  = 336h
+0x03            ; Highest I/O base address (high byte) = 336h
+0x02            ; I/O port must be aligned on a 0x02 byte boundary
+0x02            ; Cox-Missing 2 byte consecutive
+
+0x38            ; End dependent function
+
+
+;===========================================================================
+; End tag
+;
+; The end tag defines the end of the EEPROM, and the EEPROM
+; checksum.  Note that the checksum of zero means "unknown
+; checksum", and that the PnP manager should not bother to verify
+; that the EEPROM checksum is correct.
+;===========================================================================
+
+0x79
+0x00

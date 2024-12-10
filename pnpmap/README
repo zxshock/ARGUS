@@ -1,0 +1,73 @@
+		Advanced Gravis Computer Technology Ltd.
+
+	HEAD OFFICE:			US DISTRIBUTION CENTER:
+	3750 North Fraser Way, #101	Suite H, 3140 Mercer Ave.
+	Burnaby, BC, Canada		Bellingham, WA, USA
+	V5J 5E9				98225
+
+    Tel (604) 431-5020  Fax (604) 431-5155  BBS (604) 431-5927 V32bis
+	CompuServe: GO PCVENB Area #14  FTP: ftp://www.gravis.com
+   	   WWW: http://www.gravis.com  Email: sound@gravis.com
+_______________________________________________________________________
+
+                                README
+
+				for the
+
+		    UltraSound Plug & Play Preparation
+
+                           Version 2.0 software
+
+			  -  February 14, 1997 -
+_______________________________________________________________________
+
+
+This is the "UltraSound PnP 2.0 Preparation Disk" that is used with both the
+Windows 95 and DOS / Windows 3.x software setups / installs.
+
+The enclosed ROM file, GRAVIS.ROM, is a newly updated EEPROM file that
+reduces your IRQ usage for the UltraSound Plug & Play card as well as
+providing better support for Plug & Play BIOSes and Windows 95.
+
+Refer to the README. files on the other disks
+("UltraSound PnP 2.0 Win 95 Disk" or "UltraSound PnP 2.0 DOS/Win 3.x Disk")
+for instructions upgrading your UltraSound's EEPROM during the
+installation process.
+
+However you can also upgrade your EEPROM at any time via the following:
+
+1.      If you have any other Plug & Play devices in your system, we
+        recommend you shut down your computer and remove them.
+
+2.      If you are running Windows 3.x exit Windows.
+
+3.      If you are running Windows 95 restart the computer in MS-DOS mode.
+        (Start->ShutDown->Restart the computer in MS-DOS mode?).
+
+4.      At the Command Prompt, insert the 'Public BETA Preparation Disk'.
+
+5. 	Type A:  <Enter>  to go to your A drive.
+
+6. 	Type   PNPMAP /f GRAVIS.ROM   <Enter>
+
+7.      When prompted, hit Y <enter> to confirm re-writing your EEPROM on the
+        UltraSound Plug & Play Card.
+
+8.      When the program exists and you are back at the DOS prompt, remove
+        the floppy disk and power down your machine. When you power you
+        machine back up, the new ROM file will be in effect.
+
+There are 2 other ROM files enclosed on this disk.
+
+GRAVNOCD.ROM is similar to GRAVIS.ROM except that it has the IDE CD-ROM
+Interface disabled. If you are not using the CD-ROM Interface you should
+use this ROM file as it will reduce the number of resources your UltraSound
+uses.
+
+OLDGRAV.ROM is an older UltraSound Plug & Play ROM file which you can go back
+to should either of the new ROM files create any new problems for you.
+
+To use these ROM files, follow the instructions above except substitite the
+name of the ROM file you wish to use in place of GRAVIS.ROM.
+
+[End of File]
